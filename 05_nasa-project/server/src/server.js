@@ -1,3 +1,6 @@
+//const express = require('express');
+//const app = express();
+
 const http = require('http');
 
 require('dotenv').config();
@@ -16,6 +19,7 @@ async function startServer() {
   await loadPlanetsData();
   await loadLaunchData();
 
+  //app.listen();
   server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`);
   });
