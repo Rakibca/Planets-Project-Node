@@ -13,6 +13,20 @@ function isHabitablePlanet(planet) {
   );
 }
 
+/*
+// NOTES ON PROMISES:
+const promise = new Promise((resolve, reject) => {
+resolve(42);
+});
+
+// 42 is the value passed in as result
+promise.then((result) => {
+});
+
+const result = await promise;
+console.log(result);
+*/
+
 function loadPlanetsData() {
   return new Promise((resolve, reject) => {
     fs.createReadStream(
