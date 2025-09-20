@@ -17,17 +17,17 @@ async function populateLaunches() {
         {
           path: 'rocket',
           select: {
-            name: 1
-          }
+            name: 1,
+          },
         },
         {
           path: 'payloads',
           select: {
-            'customers': 1
-          }
-        }
-      ]
-    }
+            customers: 1,
+          },
+        },
+      ],
+    },
   });
 
   if (response.status !== 200) {
@@ -82,9 +82,7 @@ async function existsLaunchWithId(launchId) {
 }
 
 async function getLatestFlightNumber() {
-  const latestLaunch = await launchesDatabase
-    .findOne()
-    .sort('-flightNumber');
+  const latestLaunch = await launchesDatabase.findOne().sort('-flightNumber');
 
   if (!latestLaunch) {
     return DEFAULT_FLIGHT_NUMBER;
@@ -95,18 +93,22 @@ async function getLatestFlightNumber() {
 
 async function getAllLaunches(skip, limit) {
   return await launchesDatabase
-    .find({}, { '_id': 0, '__v': 0 })
+    .find({}, { _id: 0, __v: 0 })
     .sort({ flightNumber: 1 })
     .skip(skip)
     .limit(limit);
 }
 
 async function saveLaunch(launch) {
-  await launchesDatabase.findOneAndUpdate({
-    flightNumber: launch.flightNumber,
-  }, launch, {
-    upsert: true,
-  });
+  await launchesDatabase.findOneAndUpdate(
+    {
+      flightNumber: launch.flightNumber,
+    },
+    launch,
+    {
+      upsert: true,
+    }
+  );
 }
 
 async function scheduleNewLaunch(launch) {
@@ -118,7 +120,7 @@ async function scheduleNewLaunch(launch) {
     throw new Error('No matching planet found');
   }
 
-  const newFlightNumber = await getLatestFlightNumber() + 1;
+  const newFlightNumber = (await getLatestFlightNumber()) + 1;
 
   const newLaunch = Object.assign(launch, {
     success: true,
@@ -131,12 +133,15 @@ async function scheduleNewLaunch(launch) {
 }
 
 async function abortLaunchById(launchId) {
-  const aborted = await launchesDatabase.updateOne({
-    flightNumber: launchId,
-  }, {
-    upcoming: false,
-    success: false,
-  });
+  const aborted = await launchesDatabase.updateOne(
+    {
+      flightNumber: launchId,
+    },
+    {
+      upcoming: false,
+      success: false,
+    }
+  );
 
   return aborted.modifiedCount === 1;
 }
